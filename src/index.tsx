@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { database } from 'firebase';
-import { StyleSheet, View, Text, AsyncStorage } from 'react-native';
+import { StyleSheet, View, Text } from 'react-native';
 import Button from './Components/Button';
 import List from './Components/List';
 import Input from './Components/Input';
@@ -16,42 +16,20 @@ type State = {
   data: Data[]
 }
 
-export default class Todo extends PureComponent<Props, State> {
+export default class Todo extends PureComponent<State> {
   state = {
     description: '',
     data: []
   }
 
   componentDidMount() {
-    this.fetchLocalStorage();
-
     database().ref('list/').on('value', async (snapshot) => {
       const list = snapshot.val();
-
-      if (list) {
-        await AsyncStorage.setItem('tasks', JSON.stringify(Object.values(list)))
-        .then(() => {
-          console.log('It was saved successfully')
-        })
-        .catch(() => {
-          console.log('There was an error saving the product')
-        })
-      }
 
       this.setState({
         data: list ? Object.values(list) : []
       })
     });
-  }
-
-  fetchLocalStorage = async () => {
-    await AsyncStorage.getItem('tasks')
-    .then((result) => {
-      this.setState({ data: JSON.parse(result)})
-    })
-    .catch(() => {
-      console.log('An error occurred while fetching local data')
-    })
   }
 
   handleCreateTask = () => {
@@ -68,23 +46,17 @@ export default class Todo extends PureComponent<Props, State> {
         completed: false
       });
 
-      this.setState({ description: '' })
+      return this.setState({ description: '' });
     } catch(err) {
       console.log('ERROR: ', err);
     }
   }
 
-  changeInputValue = (value) => {
-    this.setState({
-      description: value
-    })
-  }
-
-  handleCheckTask = (id, completed) => {
+  handleCheckTask = (id: string, completed: boolean) => {
     try {
       const query = database().ref("list/").orderByChild("id").equalTo(id);
 
-      query.once("child_added", (snapshot) => {
+      return query.once("child_added", (snapshot) => {
         snapshot.ref.update({ completed: !completed })
       });
     } catch(err) {
@@ -92,16 +64,20 @@ export default class Todo extends PureComponent<Props, State> {
     }
   }
 
-  handleRemoveTask = (id) => {
+  handleRemoveTask = (id: string) => {
     try {
       const query = database().ref("list/").orderByChild("id").equalTo(id);
 
-      query.once("child_added", (snapshot) => {
+      return query.once("child_added", (snapshot) => {
         snapshot.ref.remove()
       });
     } catch(err) {
       console.log('ERROR: ', err);
     }
+  }
+
+  changeInputValue = (value: string) => {
+    return this.setState({ description: value });
   }
 
   render() {
