@@ -17,14 +17,14 @@ type Props = {
 }
 
 export default class List extends PureComponent<Props> {
-  renderTask = (task) => {
+  renderTask = (task: Data) => {
     const { handleCheck, handleRemove } = this.props;
 
     return (
       <View style={styles.taskContainer}>
         <CheckBox
           checked={task.completed}
-          onChangeToggle={() => handleCheck(task.id, task.completed)}
+          handleToggle={() => handleCheck(task.id, task.completed)}
         />
         <View style={{ flex: 1 }}>
           <Text style={[styles.description, task.completed && styles.line]}>
@@ -51,7 +51,10 @@ export default class List extends PureComponent<Props> {
         <View style={styles.header}>
           <Text style={[styles.text, styles.font20]}>Tasks</Text>
           <Text style={[styles.text, styles.font16]}>
-            {`${data.filter(t => t.completed).length}/${data.length}`}
+            {
+              data.length > 0 &&
+                `${data.filter(t => t.completed).length}/${data.length}`
+            }
           </Text>
         </View>
         <FlatList
@@ -91,13 +94,13 @@ const styles = StyleSheet.create({
   },
 
   taskContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'rgba(255, 255, 255, .1)',
     minHeight: 40,
     padding: 8,
     borderRadius: 4,
     marginVertical: 4,
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: 'rgba(255, 255, 255, .1)',
   },
 
   description: {

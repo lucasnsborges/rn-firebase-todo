@@ -5,7 +5,7 @@ import TouchableItem from './TouchableItem';
 
 type Props = {
   checked: boolean;
-  onChangeToggle: (checked: boolean) => void;
+  handleToggle: (checked: boolean) => void;
 }
 
 export default class CheckBox extends PureComponent<Props> {
@@ -13,14 +13,14 @@ export default class CheckBox extends PureComponent<Props> {
     checked: false
   }
 
-  onChangeToggle = () => {
+  handleToggle = () => {
     const { checked } = this.props;
 
     this.setState({
       checked: !checked
     });
 
-    this.props.onChangeToggle(!checked);
+    this.props.handleToggle(!checked);
   }
 
   render() {
@@ -31,7 +31,7 @@ export default class CheckBox extends PureComponent<Props> {
         borderless={true}
         pressColor='rgba(255, 255, 255, .16)'
         style={styles.container}
-        onPress={this.onChangeToggle}
+        onPress={this.handleToggle}
       >
         {
           checked && (<FontAwesome5 name="check" color="#FFF" />)

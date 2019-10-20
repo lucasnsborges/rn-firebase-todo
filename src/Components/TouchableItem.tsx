@@ -1,16 +1,15 @@
 import React, { PureComponent } from 'react';
 import {
-    TouchableWithoutFeedback,
-    TouchableNativeFeedback,
-    TouchableOpacity,
-    Platform,
-    View,
-    StyleProp,
-    ViewStyle
+  TouchableWithoutFeedback,
+  TouchableNativeFeedback,
+  TouchableOpacity,
+  Platform,
+  View,
+  StyleProp,
+  ViewStyle
 } from 'react-native';
 
 type Props = React.ComponentProps<typeof TouchableWithoutFeedback> & {
-  delayPressIn: number;
   pressColor: string;
   activeOpacity?: number;
   borderless?: boolean;
@@ -22,7 +21,6 @@ const LOLLIPOP = 21;
 
 export default class TouchableItem extends PureComponent<Props> {
   static defaultProps = {
-    delayPressIn: 0,
     pressColor: 'rgba(0, 0, 0, .16)',
   }
 
